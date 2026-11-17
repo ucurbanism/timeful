@@ -41,25 +41,3 @@ export function hasGivenConsent() {
   return getCookieConsent() !== null
 }
 
-// Initialize Google Tag Manager consent
-export function initializeGTMConsent() {
-  if (!window.dataLayer) {
-    window.dataLayer = []
-  }
-
-  const consent = getCookieConsent()
-  if (consent) {
-    window.dataLayer.push({
-      event: "consent_default",
-      analytics_consent: consent.preferences.analytics ? "granted" : "denied",
-      ad_consent: consent.preferences.advertising ? "granted" : "denied",
-    })
-  } else {
-    window.dataLayer.push({
-      event: "consent_default",
-      analytics_consent: "granted",
-      ad_consent: "granted",
-    })
-  }
-}
-
