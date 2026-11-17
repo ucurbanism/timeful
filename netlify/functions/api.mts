@@ -187,7 +187,7 @@ function eventFields(p: Record<string, any>) {
 const goTime = (d: Date) => d.toISOString().replace(/\.(\d*?)0*Z$/, (_m, f) => (f ? `.${f}Z` : "Z"))
 const times = (v: Date[] | null | undefined) => (v == null ? null : v.map(goTime))
 const hex = (id: ObjectId | null | undefined) => (id ? id.toHexString() : ZERO_ID)
-const orNull = <T>(v: T | undefined) => (v === undefined ? null : v)
+const orNull = (v: unknown) => (v === undefined ? null : v)
 
 const guestUser = (name: string) => ({
   timezoneOffset: 0,
