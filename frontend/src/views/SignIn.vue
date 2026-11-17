@@ -385,11 +385,6 @@ export default {
         }
         const user = await post("/auth/otp/verify", body)
         this.setAuthUser(user)
-        this.$posthog?.identify(user._id, {
-          email: user.email,
-          firstName: user.firstName,
-          lastName: user.lastName,
-        })
         this.$router.replace({ name: "home" })
       } catch (err) {
         const errorCode = err?.parsed?.error

@@ -464,11 +464,6 @@ export default {
     },
     _emailSignIn(user) {
       this.setAuthUser(user)
-      this.$posthog?.identify(user._id, {
-        email: user.email,
-        firstName: user.firstName,
-        lastName: user.lastName,
-      })
       this.$router.replace({ name: "home" })
     },
     signIn() {
@@ -476,7 +471,6 @@ export default {
     },
     openHowItWorksDialog() {
       this.showHowItWorksDialog = true
-      this.$posthog.capture("how_it_works_clicked")
     },
     onPlay() {
       setTimeout(() => {

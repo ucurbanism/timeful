@@ -16,7 +16,6 @@
         color="white"
         class="tw-mt-3 tw-flex-shrink-0 sm:tw-ml-4 sm:tw-mt-0"
         small
-        @click="trackDiscordClick"
       >
         Join Discord
       </v-btn>
@@ -58,12 +57,6 @@ export default {
     dismiss() {
       this.show = false
       localStorage.setItem(this.localStorageKey, "true")
-      this.$posthog?.capture("discord_banner_dismissed")
-    },
-    trackDiscordClick() {
-      this.$posthog?.capture("discord_banner_clicked", {
-        discordUrl: this.discordUrl,
-      })
     },
   },
 
