@@ -4,7 +4,7 @@
       <div class="tw-select-none tw-py-4" style="-webkit-touch-callout: none">
         <div class="tw-flex tw-flex-col sm:tw-flex-row">
           <div
-            class="tw-flex tw-grow tw-pl-4"
+            class="tw-flex tw-min-w-0 tw-grow tw-pl-4"
             :class="isSignUp ? '' : 'tw-pr-4'"
           >
             <template v-if="event.daysOnly">
@@ -177,8 +177,8 @@
                 </template>
               </div>
 
-              <!-- Middle section -->
-              <div class="tw-grow">
+              <!-- Middle section. min-w-0 lets the grid shrink so the side panel fits at tablet widths -->
+              <div class="tw-min-w-0 tw-grow">
                 <div
                   ref="calendar"
                   @scroll="onCalendarScroll"
@@ -3559,14 +3559,13 @@ export default {
         url = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(
           this.event.name
         )}&dates=${start}/${end}&details=${encodeURIComponent(
-          "\n\nThis event was scheduled with Timeful: https://timeful.app/e/"
-        )}${eventId}&ctz=${this.curTimezone.value}&add=${emailsString}`
+          `\n\nPoll: ${window.location.origin}/e/${eventId}`
+        )}&ctz=${this.curTimezone.value}&add=${emailsString}`
       } else {
         url = `https://outlook.live.com/calendar/0/deeplink/compose?subject=${encodeURIComponent(
           this.event.name
         )}&body=${encodeURIComponent(
-          "\n\nThis event was scheduled with Timeful: https://timeful.app/e/" +
-            eventId
+          `\n\nPoll: ${window.location.origin}/e/${eventId}`
         )}&startdt=${startDate.toISOString()}&enddt=${endDate.toISOString()}&location=${encodeURIComponent(
           this.event.location || ""
         )}&path=/calendar/action/compose&timezone=${this.curTimezone.value}`

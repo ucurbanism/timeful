@@ -2,6 +2,9 @@
 export const serverURL =
   process.env.NODE_ENV === "development" ? "http://localhost:3002/api" : "/api"
 
+// Linked from the app as the AGPL requires. Change it if the fork moves.
+export const sourceCodeUrl = "https://github.com/ucurbanism/timeful"
+
 // Errors enum
 export const errors = Object.freeze({
   JsonError: "json-error",

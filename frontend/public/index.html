@@ -12,16 +12,9 @@
     <!-- iOS Safari -->
     <meta name="apple-mobile-web-app-status-bar-style" content="#FFFFFF" />
     <div style="display:none">
-    {{ $defaultTitle := "Timeful - Find a time to meet" }}
-    {{ $defaultDescription := "Timeful helps you find the best time for a group to meet. It is a free availability poll that is easy to use and integrates with your calendar." }}
-    {{ $defaultOgImage := "/img/ogImage.png" }}
+    {{ $defaultTitle := "Find a time to meet" }}
+    {{ $defaultDescription := "A quick availability poll for finding the best time for a group to meet." }}
     </div>
-    <!-- <title>Timeful - Find a time to meet</title>
-    <meta name="description" content="Timeful helps you find the best time for a group to meet. It is a free availability poll that is easy to use and integrates with your calendar." />
-    <meta property="og:title" content="Timeful - Find a time to meet" />
-    <meta property="og:description" content="Timeful helps you find the best time for a group to meet. It is a free availability poll that is easy to use and integrates with your calendar." />
-    <meta property="og:image" content="/img/ogImage.png" />
-    <meta property="og:image:secure_url" content="/img/ogImage.png" /> -->
     <title>{{ or .title $defaultTitle }}</title>
     <meta 
       name="description" 
@@ -29,8 +22,6 @@
     />
     <meta property="og:title" content="{{or .ogTitle $defaultTitle}}" />
     <meta property="og:description" content="{{or .ogDescription $defaultDescription }}" />
-    <meta property="og:image" content="{{or .ogImage $defaultOgImage }}" />
-    <meta property="og:image:secure_url" content="{{or .ogImage $defaultOgImage }}" />
     <link
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/@mdi/font@latest/css/materialdesignicons.min.css"
@@ -44,11 +35,7 @@
   </head>
   <body>
     <noscript>
-      <strong
-        >We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work
-        properly without JavaScript enabled. Please enable it to
-        continue.</strong
-      >
+      <strong>This page needs JavaScript. Please turn it on and reload.</strong>
     </noscript>
     <div id="app"></div>
     <!-- built files will be auto injected -->

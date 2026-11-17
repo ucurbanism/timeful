@@ -36,11 +36,8 @@ const routes = [
     component: () => import("@/views/SignUp.vue"),
     props: true,
   },
-  {
-    path: "/privacy-policy",
-    name: "privacy-policy",
-    component: () => import("@/views/PrivacyPolicy.vue"),
-  },
+  // Pointed at Timeful's own privacy policy; add the club's here if it writes one
+  { path: "/privacy-policy", name: "privacy-policy", redirect: { name: "landing" } },
   {
     path: "*",
     name: "404",
