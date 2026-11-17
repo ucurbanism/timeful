@@ -1,7 +1,6 @@
 import Vue from "vue"
 import VueRouter from "vue-router"
 import Landing from "@/views/Landing"
-import { get } from "@/utils"
 
 Vue.use(VueRouter)
 
@@ -11,17 +10,14 @@ const routes = [
     name: "landing",
     component: Landing,
   },
-  {
-    path: "/home",
-    name: "home",
-    component: () => import("@/views/Home.vue"),
-    props: true,
-  },
-  {
-    path: "/settings",
-    name: "settings",
-    component: () => import("@/views/Settings.vue"),
-  },
+  // Names-only build: account pages and groups are gone. Their names stay as redirects because
+  // other components still link to them.
+  { path: "/home", name: "home", redirect: { name: "landing" } },
+  { path: "/settings", name: "settings", redirect: { name: "landing" } },
+  { path: "/g/:groupId", name: "group", redirect: { name: "landing" } },
+  { path: "/sign-in", name: "sign-in", redirect: { name: "landing" } },
+  { path: "/sign-up", name: "sign-up", redirect: { name: "landing" } },
+  { path: "/auth", name: "auth", redirect: { name: "landing" } },
   {
     path: "/e/:eventId",
     name: "event",
@@ -35,32 +31,10 @@ const routes = [
     props: true,
   },
   {
-    path: "/g/:groupId",
-    name: "group",
-    component: () => import("@/views/Group.vue"),
-    props: true,
-  },
-  {
     path: "/s/:signUpId",
     name: "signUp",
     component: () => import("@/views/SignUp.vue"),
     props: true,
-  },
-  {
-    path: "/sign-in",
-    name: "sign-in",
-    component: () => import("@/views/SignIn.vue"),
-  },
-  {
-    path: "/sign-up",
-    name: "sign-up",
-    component: () => import("@/views/SignIn.vue"),
-    props: { initialIsSignUp: true },
-  },
-  {
-    path: "/auth",
-    name: "auth",
-    component: () => import("@/views/Auth.vue"),
   },
   {
     path: "/privacy-policy",
@@ -83,26 +57,6 @@ const router = new VueRouter({
   mode: "history",
   base: process.env.BASE_URL,
   routes,
-})
-
-router.beforeEach(async (to, from, next) => {
-  const authRoutes = ["home", "settings"]
-  const noAuthRoutes = ["sign-in", "sign-up"]
-  try {
-    await get("/auth/status")
-
-    if (noAuthRoutes.includes(to.name)) {
-      next({ name: "home" })
-    } else {
-      next()
-    }
-  } catch (err) {
-    if (authRoutes.includes(to.name)) {
-      next({ name: "landing" })
-    } else {
-      next()
-    }
-  }
 })
 
 export default router

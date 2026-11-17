@@ -244,29 +244,6 @@
                   </div>
                 </template>
               </v-checkbox>
-              <v-checkbox
-                v-else
-                disabled
-                messages="Only show responses to event creator. "
-                off-icon="mdi-checkbox-blank-off-outline"
-              >
-                <template v-slot:label>
-                  <span class="tw-text-sm"
-                    >Hide responses from respondents</span
-                  >
-                </template>
-                <template v-slot:message="{ key, message }">
-                  <div
-                    class="tw-pointer-events-auto -tw-mt-1 tw-ml-[32px] tw-text-xs tw-text-dark-gray"
-                  >
-                    {{ message }}
-                    <span class="tw-font-medium tw-text-very-dark-gray"
-                      ><a @click="$emit('signIn')">Sign in</a>
-                      to use this feature
-                    </span>
-                  </div>
-                </template>
-              </v-checkbox>
               <!-- <v-checkbox
                 v-if="authUser"
                 v-model="sendEmailAfterXResponsesEnabled"

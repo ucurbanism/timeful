@@ -651,7 +651,8 @@ export default {
           this.scheduleOverlapComponent.setAvailabilityAutomatically()
         }
       } else {
-        this.choiceDialog = true
+        // Names-only build: no calendar autofill or sign-in, so go straight to marking times
+        this.setAvailabilityManually()
       }
     },
     /** Add guest availability while signed in */

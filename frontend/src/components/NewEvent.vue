@@ -210,29 +210,6 @@
             >
           </template>
         </v-checkbox>
-        <v-checkbox
-          v-else-if="!guestEvent"
-          disabled
-          messages="test"
-          off-icon="mdi-checkbox-blank-off-outline"
-          class="tw-mt-2"
-        >
-          <template v-slot:label>
-            <span class="tw-text-sm"
-              >Email me each time someone joins my event</span
-            >
-          </template>
-          <template v-slot:message="{ key, message }">
-            <div
-              class="tw-pointer-events-auto -tw-mt-1 tw-ml-[32px] tw-text-xs tw-text-dark-gray"
-            >
-              <span class="tw-font-medium tw-text-very-dark-gray"
-                ><a @click="$emit('signIn')">Sign in</a>
-                to use this feature
-              </span>
-            </div>
-          </template>
-        </v-checkbox>
 
         <div class="tw-flex tw-flex-col tw-gap-2">
           <ExpandableSection
@@ -314,28 +291,6 @@
                 </template>
               </v-checkbox>
               <v-checkbox
-                v-else-if="!guestEvent"
-                disabled
-                messages="test"
-                off-icon="mdi-checkbox-blank-off-outline"
-              >
-                <template v-slot:label>
-                  <span class="tw-text-sm"
-                    >Collect respondents' email addresses</span
-                  >
-                </template>
-                <template v-slot:message="{ key, message }">
-                  <div
-                    class="tw-pointer-events-auto -tw-mt-1 tw-ml-[32px] tw-text-xs tw-text-dark-gray"
-                  >
-                    <span class="tw-font-medium tw-text-very-dark-gray"
-                      ><a @click="$emit('signIn')">Sign in</a>
-                      to use this feature
-                    </span>
-                  </div>
-                </template>
-              </v-checkbox>
-              <v-checkbox
                 v-if="authUser && !guestEvent"
                 v-model="blindAvailabilityEnabled"
                 messages="Only show responses to event creator"
@@ -350,29 +305,6 @@
                     class="-tw-mt-1 tw-ml-[32px] tw-text-xs tw-text-dark-gray"
                   >
                     {{ message }}
-                  </div>
-                </template>
-              </v-checkbox>
-              <v-checkbox
-                v-else-if="!guestEvent"
-                disabled
-                messages="Only show responses to event creator. "
-                off-icon="mdi-checkbox-blank-off-outline"
-              >
-                <template v-slot:label>
-                  <span class="tw-text-sm"
-                    >Hide responses from respondents</span
-                  >
-                </template>
-                <template v-slot:message="{ key, message }">
-                  <div
-                    class="tw-pointer-events-auto -tw-mt-1 tw-ml-[32px] tw-text-xs tw-text-dark-gray"
-                  >
-                    {{ message }}
-                    <span class="tw-font-medium tw-text-very-dark-gray"
-                      ><a @click="$emit('signIn')">Sign in</a>
-                      to use this feature
-                    </span>
                   </div>
                 </template>
               </v-checkbox>
