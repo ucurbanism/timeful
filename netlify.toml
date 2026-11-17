@@ -1,0 +1,20 @@
+# Netlify deploy: static Vue app + the API function in netlify/functions/api.mts (answers /api/*).
+# The Go server in server/ is not used here. Set MONGODB_URI in the Netlify site's environment variables.
+
+[build]
+  command = "npm run build"
+  publish = "frontend/dist"
+
+[build.environment]
+  NODE_VERSION = "24"
+
+[functions]
+  # Ship the MongoDB driver as-is instead of bundling it (it has optional native add-ons)
+  external_node_modules = ["mongodb"]
+
+# Single-page app: unknown paths load index.html and the Vue router takes over.
+# The API function's /api/* path is matched before redirects, so this doesn't catch API calls.
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
