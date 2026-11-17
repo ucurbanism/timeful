@@ -1,5 +1,35 @@
 # Timeful Deployment Guide
 
+## Netlify + MongoDB Atlas (names-only, free)
+
+This fork can run with no server to look after: Netlify serves the Vue app and runs the API as a
+Netlify Function (`netlify/functions/api.mts`), and MongoDB Atlas holds the data. The Go server in
+`server/` isn't used for this. The function only has the names-only guest routes, so if you change
+those routes in Go, change them in the function too.
+
+1. **Database.** Create a free cluster at [MongoDB Atlas](https://www.mongodb.com/cloud/atlas). Add a
+   database user, allow network access from anywhere (`0.0.0.0/0`, since Netlify Functions have no
+   fixed IP), and copy the connection string (`mongodb+srv://...`). Free clusters have no backups and
+   can be paused after long inactivity.
+2. **Site.** In Netlify, add a new site from this GitHub repository. `netlify.toml` sets the build
+   command, the publish folder and the Node version, so leave those fields as they are.
+3. **Environment variable.** Under Site configuration > Environment variables, add `MONGODB_URI` with
+   the Atlas connection string, then redeploy.
+4. **Check.** `https://<your-site>.netlify.app/api/health` should return `{"ok":true}`. Then create a
+   poll and add availability with a name.
+
+Run it locally with MongoDB running (`MONGODB_URI`, default `mongodb://localhost`):
+
+```bash
+npm install && npm run build && npm run dev   # http://localhost:8888
+npm test                                      # API tests; writes test polls to that database
+```
+
+Differences from the Go server: shared links show the site's default title instead of each poll's
+name, and the limit on repeated failed poll lookups applies per function instance.
+
+## Docker Compose + Caddy
+
 Production deployment using Docker Compose behind a Caddy reverse proxy.
 
 ## Prerequisites

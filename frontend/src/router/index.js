@@ -42,11 +42,6 @@ const routes = [
     component: () => import("@/views/PrivacyPolicy.vue"),
   },
   {
-    path: "/cookie-settings",
-    name: "cookie-settings",
-    component: () => import("@/components/CookieSettings.vue"),
-  },
-  {
     path: "*",
     name: "404",
     component: () => import("@/views/PageNotFound.vue"),

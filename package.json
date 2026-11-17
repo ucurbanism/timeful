@@ -1,0 +1,17 @@
+{
+  "name": "timeful-netlify",
+  "private": true,
+  "type": "module",
+  "description": "Netlify deploy of the names-only Timeful fork: the Vue frontend plus the API in netlify/functions/api.mts",
+  "scripts": {
+    "build": "npm --prefix frontend ci && npm --prefix frontend run build && node netlify/render-index.mjs",
+    "dev": "node netlify/dev-server.mjs",
+    "test": "node --test netlify/api.test.mts"
+  },
+  "dependencies": {
+    "mongodb": "^7.9.0"
+  },
+  "devDependencies": {
+    "@netlify/functions": "^6.1.1"
+  }
+}
