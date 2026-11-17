@@ -13,10 +13,6 @@
           <LandingPageHeader>
             <v-btn text @click="openHowItWorksDialog">How it works</v-btn>
             <v-btn text href="/blog">Blog</v-btn>
-            <div v-if="authUser" class="tw-ml-2">
-              <AuthUserMenu />
-            </div>
-            <v-btn v-else text :to="{ name: 'sign-in' }">Sign in</v-btn>
           </LandingPageHeader>
         </div>
       </div>
@@ -367,48 +363,16 @@ export default {
           "Unlimited! We've tested events with over 500+ responses and it works great.",
       },
       {
-        question: "What calendars does Timeful integrate with?",
+        question: "Do I need an account?",
         answer:
-          "Timeful allows you to autofill your availability from your Google Calendar, Outlook, Apple Calendar, or an ICS feed URL. We are working on adding more calendar types soon!",
-      },
-      {
-        question: "Is calendar access required in order to use Timeful?",
-        answer:
-          "Nope! You can manually input your availability, but we highly recommend allowing calendar access in order to view your calendar events while doing so.",
-      },
-      {
-        question: "Will other people be able to see my calendar events?",
-        answer:
-          "Nope! All other users will be able to see is the availability that you enter for an event.",
+          "No. Make a poll, share the link, and everyone just types their name when they add their availability.",
       },
       {
         question: "How do I edit my availability?",
         answer:
-          'If you are signed in, simply click the "Edit availability" button. If you entered your availability as a guest, hover over your name and click the pencil icon next to it.',
+          "Hover over your name and click the pencil icon next to it.",
       },
-      {
-        question: "How is Timeful different from Lettucemeet or When2meet?",
-        points: [
-          "Much better UI (web and mobile)",
-          "Seamless and working calendar integration",
-          "A slew of other features that we don't have space to list here",
-        ],
-      },
-      {
-        question: `I want it so that only I can see people's responses.`,
-        answer: `Just check "Only show responses to event creator" under Advanced Options when creating your event! Other respondees will not be able to see each other's names or availability.`,
-        authRequired: true,
-      },
-      {
-        question: `Can I receive emails when someone fills out my event?`,
-        answer: `Absolutely! Check "Email me each time someone joins my event" when creating an event. <br><br>To receive email notifications after a specific number (X) of responses are added, check "Email me after X responses" in Advanced Options.`,
-        authRequired: true,
-      },
-      {
-        question: `How do I send reminders to people to fill out an event?`,
-        answer: `Open the "Email Reminders" section when creating an event and input everybody's email address. Reminder emails will be sent the day of event creation, one day after, and three days after. <br><br>You will also receive an email once everybody has filled out the Timeful.`,
-        authRequired: true,
-      },
+
     ],
     redditComments: [
       {

@@ -25,7 +25,7 @@
       <div
         class="tw-relative tw-m-auto tw-flex tw-h-full tw-max-w-6xl tw-items-center tw-justify-center tw-px-4"
       >
-        <router-link :to="{ name: 'home' }">
+        <router-link :to="{ name: 'landing' }">
           <Logo type="timeful" />
         </router-link>
         <v-expand-x-transition>
@@ -75,12 +75,6 @@
           @click="() => _createNew()"
         >
           + Create new
-        </v-btn>
-        <div v-if="authUser" class="sm:tw-ml-4">
-          <AuthUserMenu />
-        </div>
-        <v-btn v-else id="top-right-sign-in-btn" text @click="signIn">
-          Sign in
         </v-btn>
       </div>
     </div>

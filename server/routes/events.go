@@ -31,8 +31,9 @@ import (
 func InitEvents(router *gin.RouterGroup) {
 	eventRouter := router.Group("/events")
 
+	// Names-only build: only the routes a guest can use. Import, decline, calendar availability, delete,
+	// duplicate, archive and remindee tracking all need an account or email, so they are not registered.
 	eventRouter.POST("", createEvent)
-	eventRouter.POST("/import", middleware.AuthRequired(), importEvent)
 	eventRouter.PUT("/:eventId", editEvent)
 	eventRouter.GET("/:eventId/ids", middleware.LimitEventLookupMisses(), getEventIds)
 	eventRouter.GET("/:eventId", middleware.LimitEventLookupMisses(), getEvent)
@@ -40,12 +41,15 @@ func InitEvents(router *gin.RouterGroup) {
 	eventRouter.POST("/:eventId/response", updateEventResponse)
 	eventRouter.DELETE("/:eventId/response", deleteEventResponse)
 	eventRouter.POST("/:eventId/rename-user", renameUser)
-	eventRouter.POST("/:eventId/responded", userResponded)
-	eventRouter.POST("/:eventId/decline", middleware.AuthRequired(), declineInvite)
-	eventRouter.GET("/:eventId/calendar-availabilities", middleware.AuthRequired(), getCalendarAvailabilities)
-	eventRouter.DELETE("/:eventId", middleware.AuthRequired(), deleteEvent)
-	eventRouter.POST("/:eventId/duplicate", middleware.AuthRequired(), duplicateEvent)
-	eventRouter.POST("/:eventId/archive", middleware.AuthRequired(), archiveEvent)
+}
+
+// Names-only build: no availability groups, and nothing that emails people or needs an owner account
+// (reminders, notifications, collected emails, owner-only "blind" results)
+func namesOnlyEventError(eventType models.EventType) string {
+	if eventType == models.GROUP {
+		return errs.GroupsDisabled
+	}
+	return ""
 }
 
 // @Summary Creates a new event
@@ -93,6 +97,13 @@ func createEvent(c *gin.Context) {
 		fmt.Println(err)
 		return
 	}
+	if e := namesOnlyEventError(payload.Type); e != "" {
+		c.JSON(http.StatusBadRequest, responses.Error{Error: e})
+		return
+	}
+	payload.Remindees, payload.Attendees = nil, nil
+	payload.NotificationsEnabled, payload.BlindAvailabilityEnabled, payload.CollectEmails = nil, nil, nil
+	payload.SendEmailAfterXResponses = nil
 	session := sessions.Default(c)
 
 	// If user logged in, set owner id to their user id, otherwise set owner id to nil
@@ -283,6 +294,13 @@ func editEvent(c *gin.Context) {
 		logger.StdErr.Println(err)
 		return
 	}
+	if e := namesOnlyEventError(payload.Type); e != "" {
+		c.JSON(http.StatusBadRequest, responses.Error{Error: e})
+		return
+	}
+	payload.Remindees, payload.Attendees = nil, nil
+	payload.NotificationsEnabled, payload.BlindAvailabilityEnabled, payload.CollectEmails = nil, nil, nil
+	payload.SendEmailAfterXResponses = nil
 
 	eventId := c.Param("eventId")
 	event := db.GetEventByEitherId(eventId)
@@ -815,6 +833,8 @@ func updateEventResponse(c *gin.Context) {
 	if err := c.Bind(&payload); err != nil {
 		return
 	}
+	// Names-only build: guests give a name only
+	payload.Email = ""
 	session := sessions.Default(c)
 	eventId := c.Param("eventId")
 	event := db.GetEventByEitherId(eventId)

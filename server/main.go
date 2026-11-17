@@ -22,8 +22,6 @@ import (
 	"schej.it/server/db"
 	"schej.it/server/logger"
 	"schej.it/server/routes"
-	"schej.it/server/services/gcloud"
-	"schej.it/server/slackbot"
 	"schej.it/server/utils"
 
 	swaggerfiles "github.com/swaggo/files"
@@ -123,23 +121,21 @@ func main() {
 	closeConnection := db.Init()
 	defer closeConnection()
 
-	// Init google cloud stuff
-	closeTasks := gcloud.InitTasks()
-	defer closeTasks()
-
-	// Session
+	// Session (handlers still read it, but nobody signs in, so it never holds a user)
 	store := cookie.NewStore([]byte(os.Getenv("SESSION_SECRET")))
+	store.Options(sessions.Options{
+		Path:     "/",
+		MaxAge:   30 * 24 * 60 * 60,
+		HttpOnly: true,
+		Secure:   gin.Mode() == gin.ReleaseMode,
+		SameSite: http.SameSiteLaxMode,
+	})
 	router.Use(sessions.Sessions("session", store))
 
-	// Init routes
+	// Init routes. Names-only build: accounts, calendars, groups, email and the bots are not registered.
 	apiRouter := router.Group("/api")
-	routes.InitAuth(apiRouter)
-	routes.InitUser(apiRouter)
-	routes.InitUsers(apiRouter)
+	apiRouter.GET("/health", func(c *gin.Context) { c.JSON(http.StatusOK, gin.H{"ok": true}) })
 	routes.InitEvents(apiRouter)
-	routes.InitAnalytics(apiRouter)
-	routes.InitFolders(apiRouter)
-	slackbot.InitSlackbot(apiRouter)
 
 	frontendDist := os.Getenv("FRONTEND_DIST")
 	if frontendDist == "" {
@@ -221,13 +217,21 @@ func getTrustedProxies() []string {
 	return []string{"127.0.0.1", "::1", "10.0.0.0/8", "172.16.0.0/12", "192.168.0.0/16", "fc00::/7"}
 }
 
+var eventPathRegex = regexp.MustCompile(`\/e\/(\w+)`)
+
 func noRouteHandler() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		params := gin.H{}
 		path := c.Request.URL.Path
 
+		// Unknown API routes are errors, not SPA pages
+		if strings.HasPrefix(path, "/api/") {
+			c.JSON(http.StatusNotFound, gin.H{"error": "not-found"})
+			return
+		}
+
 		// Determine meta tags based off URL
-		if match := regexp.MustCompile(`\/e\/(\w+)`).FindStringSubmatchIndex(path); match != nil {
+		if match := eventPathRegex.FindStringSubmatchIndex(path); match != nil {
 			// /e/:eventId
 			eventId := path[match[2]:match[3]]
 			event := db.GetEventByEitherId(eventId)
